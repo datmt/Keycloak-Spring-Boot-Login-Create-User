@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collections;
 
 
@@ -36,7 +38,22 @@ public class KeycloakAdminClientService {
         kcUser.setEmail(user.getEmail());
         kcUser.setEnabled(true);
         kcUser.setEmailVerified(false);
-        return usersResource.create(kcUser);
+
+        Response response = usersResource.create(kcUser);
+
+        if (response.getStatus() == 201) {
+            //If you want to save the user to your other database, do it here, for example:
+//            User localUser = new User();
+//            localUser.setFirstName(kcUser.getFirstName());
+//            localUser.setLastName(kcUser.getLastName());
+//            localUser.setEmail(user.getEmail());
+//            localUser.setCreatedDate(Timestamp.from(Instant.now()));
+//            String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
+//            usersResource.get(userId).sendVerifyEmail();
+//            userRepository.save(localUser);
+        }
+
+        return response;
 
     }
 
