@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  keycloak:
+    container_name: keycloak
+    image: jboss/keycloak:15.0.2
+    restart: always
+    env_file: ./keycloak.env
+    depends_on:
+      - keycloak_db
+    volumes:
+      - ./import-this-realm.json:/tmp/realm.json
+    ports:
+      - "18080:8080"
+
+
+  keycloak_db:
+    container_name: keycloak_db
+    image: mariadb:10.3.26
+    restart: always
+    volumes:
+      - keycloak_db_vol:/var/lib/mysql
+    env_file:
+      - ./keycloak.env
+
+volumes:
+  keycloak_db_vol:
